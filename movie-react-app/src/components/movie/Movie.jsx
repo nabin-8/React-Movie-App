@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import MovieCard from "../movieCard/MovieCard"
 import SearchBar from "../searchBar/SearchBar"
 
+
 const Movie=()=>{
 
     const [movieList, setMovieList]=useState([])
@@ -11,9 +12,12 @@ const Movie=()=>{
     const getData=(data)=>{
         setMovieName(data)   
     }
-  
-    const API_KEY="88e3b712d790da0db7942b52ea4d5aea"
-    const search_api=`https://api.themoviedb.org/3/search/movie?query=${movieName}&api_key=${API_KEY}`
+
+    const API_KEY=process.env.REACT_APP_API_KEY
+    const api=process.env.REACT_APP_API_URL
+
+    const search_api=`${api}search/movie?query=${movieName}&api_key=${API_KEY}`
+    const discover_api=`${api}discover/movie?api_key=${API_KEY}`
     
     const getMovie=()=>{
         setLoading(true); // Set loading state to true
@@ -21,13 +25,15 @@ const Movie=()=>{
             fetch(search_api)
             .then(response =>response.json())
             .then(json => {
+                console.log(json)
                 setMovieList(json.results);
                 setLoading(false); // Set loading state to false after fetching data
             }) 
         }else{
-            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}`)
+            fetch(discover_api)
             .then(response =>response.json())
             .then(json => {
+                console.log(json)
                 setMovieList(json.results);
                 setLoading(false); // Set loading state to false after fetching data
             })
